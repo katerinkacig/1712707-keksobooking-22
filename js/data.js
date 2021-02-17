@@ -65,6 +65,6 @@ const createAnnouncement = () => {
   }
 };
 
-const createAnnouncements = new Array(ANNOUNCEMENTS_COUNT).fill(null).map(() => createAnnouncement());
+const createAnnouncements = () => new Array(ANNOUNCEMENTS_COUNT).fill(null).map(() => createAnnouncement());
 
 export {createAnnouncements};

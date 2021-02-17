@@ -2,7 +2,7 @@ import {createAnnouncements} from './data.js';
 
 const mapCanvas = document.querySelector('#map-canvas');
 const similarAnnouncementTemplate = document.querySelector('#card').content.querySelector('.popup');
-const similarAnnouncements = createAnnouncements;
+const similarAnnouncements = createAnnouncements();
 
 const typesHousing = {
   flat: 'Квартира',
@@ -23,10 +23,14 @@ similarAnnouncements.forEach((announcement) => {
   announcementElement.querySelector('.popup__text--capacity').textContent = announcement.offer.rooms + ' комнаты для ' + announcement.offer.guests + ' гостей';
   announcementElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + announcement.offer.checkin + ', выезд до ' + announcement.offer.checkout;
 
-  const featureItem = announcement.offer.features.reduce((accumulator, feature) => {
-    return accumulator + '<li class="popup__feature popup__feature--' + feature+ '"></li>'
-  }, '');
-  announcementElement.querySelector('.popup__features').innerHTML = featureItem;
+  const featureContainer = announcementElement.querySelector('.popup__features');
+  const featureTemplate = featureContainer.querySelector('.popup__feature');
+  featureContainer.innerHTML = '';
+  announcement.offer.features.forEach((feature) => {
+    const featureItem = featureTemplate.cloneNode(true);
+    featureItem.classList.add('popup__feature--' + feature);
+    featureContainer.appendChild(featureItem);
+  });
 
   announcementElement.querySelector('.popup__description').textContent = announcement.offer.description;
 
