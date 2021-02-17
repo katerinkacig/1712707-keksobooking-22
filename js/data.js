@@ -46,7 +46,7 @@ const createAnnouncement = () => {
       avatar: 'img/avatars/user0' + getRandomInt(1, 8) + '.png',
     },
     offer: {
-      title: 'Сдается ',
+      title: 'Сдается',
       address: lat + ', ' + lon,
       price: getRandomInt(1, 1000000),
       type: getRandomArrayElement(TYPES),
@@ -65,4 +65,6 @@ const createAnnouncement = () => {
   }
 };
 
-new Array(ANNOUNCEMENTS_COUNT).fill(null).map(() => createAnnouncement());
+const createAnnouncements = new Array(ANNOUNCEMENTS_COUNT).fill(null).map(() => createAnnouncement());
+
+export {createAnnouncements};
