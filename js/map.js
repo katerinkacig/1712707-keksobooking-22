@@ -10,19 +10,19 @@ const pins = createAnnouncements();
 
 const fieldAddress = document.querySelector('#address');
 
-const mainPinIcon = L.icon({
+const mainPinIcon = window.L.icon({
   iconUrl: '../img/main-pin.svg',
   iconSize: [32, 32],
   iconAnchor: [16, 32],
 });
 
-const pinIcon = L.icon({
+const pinIcon = window.L.icon({
   iconUrl: '../img/pin.svg',
   iconSize: [32, 32],
   iconAnchor: [16, 32],
 });
 
-const map = L.map('map-canvas')
+const map = window.L.map('map-canvas')
   .on('load', () => {
     toggleActiveMode(adForm, '.ad-form--disabled', true);
     toggleActiveMode(mapFiltersForm, '.map__filters--disabled', true);
@@ -35,14 +35,14 @@ const map = L.map('map-canvas')
     lng: LNG,
   }, 12);
 
-L.tileLayer(
+window.L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
 ).addTo(map);
 
-const mainPin = L.marker(
+const mainPin = window.L.marker(
   {
     lat: LAT,
     lng: LNG,
@@ -60,7 +60,7 @@ mainPin.on('moveend', (evt) => {
 });
 
 pins.forEach((announcement) => {
-  const pin = L.marker(
+  const pin = window.L.marker(
     {
       lat: announcement.location.x,
       lng: announcement.location.y,
