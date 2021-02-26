@@ -1,8 +1,4 @@
-import {createAnnouncements} from './data.js';
-
-const mapCanvas = document.querySelector('#map-canvas');
 const similarAnnouncementTemplate = document.querySelector('#card').content.querySelector('.popup');
-const similarAnnouncements = createAnnouncements();
 
 const typesHousing = {
   flat: 'Квартира',
@@ -11,9 +7,7 @@ const typesHousing = {
   palace: 'Дворец',
 };
 
-const similarAnnouncementsFragment = document.createDocumentFragment();
-
-similarAnnouncements.forEach((announcement) => {
+const createCustomPopup = (announcement) => {
   const announcementElement = similarAnnouncementTemplate.cloneNode(true);
 
   announcementElement.querySelector('.popup__title').textContent = announcement.offer.title;
@@ -44,9 +38,7 @@ similarAnnouncements.forEach((announcement) => {
   });
 
   announcementElement.querySelector('.popup__avatar').src = announcement.author.avatar;
+  return announcementElement;
+};
 
-  similarAnnouncementsFragment.appendChild(announcementElement);
-});
-
-
-mapCanvas.appendChild(similarAnnouncementsFragment.querySelectorAll('.popup')[0]);
+export {createCustomPopup};
