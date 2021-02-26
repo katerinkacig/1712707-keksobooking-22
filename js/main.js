@@ -1,2 +1,2 @@
-import './data.js';
-import './similar-announcements.js';
+import './toggle-active-mode.js';
+import './map.js';
