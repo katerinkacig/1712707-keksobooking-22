@@ -1,8 +1,8 @@
 const toggleActiveMode = function (form, classDisabled, isActive){
   if(isActive){
-    form.classList.add(classDisabled);
-  } else{
     form.classList.remove(classDisabled);
+  } else{
+    form.classList.add(classDisabled);
   }
 
   form.querySelectorAll('fieldset').forEach((element) => {
@@ -23,9 +23,9 @@ const toggleActiveMode = function (form, classDisabled, isActive){
 }
 
 const  adForm = document.querySelector('.ad-form');
-toggleActiveMode(adForm, '.ad-form--disabled');
+toggleActiveMode(adForm, 'ad-form--disabled');
 
 const  mapFiltersForm = document.querySelector('.map__filters');
-toggleActiveMode(mapFiltersForm, '.map__filters--disabled');
+toggleActiveMode(mapFiltersForm, 'map__filters--disabled');
 
 export {adForm, mapFiltersForm, toggleActiveMode};
