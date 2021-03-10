@@ -29,4 +29,14 @@ const getRandomFloat = function (min, max, decimalPlaces) {
   return parseFloat((Math.random() * (max - min) + min).toFixed(decimalPlaces));
 }
 
-export {getRandomInt, getRandomFloat};
+const addEscEvent = function (handler){
+  document.body.addEventListener('keyup', function (e) {
+    const key = e.keyCode;
+
+    if (key === 27) {
+      handler();
+    };
+  }, false);
+}
+
+export {getRandomInt, getRandomFloat, addEscEvent};

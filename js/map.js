@@ -1,12 +1,11 @@
 import {adForm, mapFiltersForm, toggleActiveMode} from './toggle-active-mode.js';
-import {createAnnouncements} from './data.js';
 import {createCustomPopup} from './create-custom-popup.js';
+import {getData} from './api.js';
+import {showAlert} from './show-alert.js';
 
 
 const LAT = 35.68170;
 const LNG = 139.75388;
-
-const pins = createAnnouncements();
 
 const fieldAddress = document.querySelector('#address');
 
@@ -26,14 +25,13 @@ const map = window.L.map('map-canvas')
   .on('load', () => {
     toggleActiveMode(adForm, '.ad-form--disabled', true);
     toggleActiveMode(mapFiltersForm, '.map__filters--disabled', true);
-
     fieldAddress.value = LAT + ', ' + LNG;
-    fieldAddress.setAttribute('readonly', 'readonly')
+    fieldAddress.setAttribute('readonly', 'readonly');
   })
   .setView({
     lat: LAT,
     lng: LNG,
-  }, 12);
+  }, 11);
 
 window.L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -55,24 +53,42 @@ const mainPin = window.L.marker(
 
 mainPin.addTo(map);
 
+const resetMainPin = function (){
+  mainPin.setLatLng([LAT, LNG]);
+
+  fieldAddress.value = LAT + ', ' + LNG;
+  fieldAddress.setAttribute('readonly', 'readonly');
+}
+
 mainPin.on('moveend', (evt) => {
   fieldAddress.value = evt.target.getLatLng().lat.toFixed(5) + ', ' + evt.target.getLatLng().lng.toFixed(5);
 });
 
-pins.forEach((announcement) => {
-  const pin = window.L.marker(
-    {
-      lat: announcement.location.x,
-      lng: announcement.location.y,
-    },
-    {
-      icon: pinIcon,
-    },
-  );
+const createPins = getData(
+  (announcements) => {
+    announcements.forEach((announcement) => {
+      const pin = window.L.marker(
+        {
+          lat: announcement.location.lat,
+          lng: announcement.location.lng,
+        },
+        {
+          icon: pinIcon,
+        },
+      );
 
-  pin
-    .addTo(map)
-    .bindPopup(
-      createCustomPopup(announcement),
-    );
-});
+      pin
+        .addTo(map)
+        .bindPopup(
+          createCustomPopup(announcement),
+        );
+    });
+  },
+  (err) => {
+    showAlert(err + ' Не удалось получить данные с сервера.');
+  },
+);
+
+createPins();
+
+export {resetMainPin};
