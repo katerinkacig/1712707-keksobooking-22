@@ -405,6 +405,15 @@ fieldset {
   margin-right: 14px;
 }
 
+.ad-form__element--error .ad-form__label{
+  color: red;
+}
+
+.ad-form__element--error input{
+  background: rgba(247, 5, 5, 0.1);
+  border: 1px solid red;
+}
+
 .features legend {
   padding-bottom: 5px;
 }
