@@ -35,7 +35,7 @@ const addEscEvent = function (handler){
 
     if (key === 27) {
       handler();
-    };
+    }
   }, false);
 }
 
