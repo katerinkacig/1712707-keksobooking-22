@@ -24,8 +24,8 @@ const pinIcon = window.L.icon({
 
 const map = window.L.map('map-canvas')
   .on('load', () => {
-    toggleActiveMode(adForm, '.ad-form--disabled', true);
-    toggleActiveMode(mapFiltersForm, '.map__filters--disabled', true);
+    toggleActiveMode(adForm, 'ad-form--disabled', true);
+    toggleActiveMode(mapFiltersForm, 'map__filters--disabled', true);
 
     fieldAddress.value = LAT + ', ' + LNG;
     fieldAddress.setAttribute('readonly', 'readonly')
