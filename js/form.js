@@ -5,13 +5,56 @@ import {resetMainPin} from './map.js';
 const adForm = document.querySelector('.ad-form');
 const mapFiltersForm = document.querySelector('.map__filters');
 const main = document.querySelector('main');
-const typeSelect = adForm.querySelector('#type');
-const priceInput = adForm.querySelector('#price');
-const timeinSelect = adForm.querySelector('#timein');
-const timeoutSelect = adForm.querySelector('#timeout');
+const titleInput = document.querySelector('#title');
+const typeSelect = document.querySelector('#type');
+const priceInput = document.querySelector('#price');
+const timeinSelect = document.querySelector('#timein');
+const timeoutSelect = document.querySelector('#timeout');
+const roomsSelect = document.querySelector('#room_number');
+const capacitySelect = document.querySelector('#capacity');
 
-const setMinPrice = function (type){
-  switch(type) {
+const checkRequired = function (field){
+  const fieldset = field.parentElement;
+  field.addEventListener('invalid', function (){
+    if (field.validity.valueMissing) {
+      fieldset.classList.add('ad-form__element--error');
+    }
+  });
+}
+
+checkRequired(titleInput);
+checkRequired(priceInput);
+
+titleInput.addEventListener('input', () => {
+  const fieldset = titleInput.parentElement;
+
+  if (titleInput.validity.tooShort || titleInput.validity.tooLong) {
+    fieldset.classList.add('ad-form__element--error');
+  } else {
+    titleInput.setCustomValidity('');
+    fieldset.classList.remove('ad-form__element--error');
+  }
+
+  titleInput.reportValidity();
+});
+
+priceInput.addEventListener('input', () => {
+  const value = priceInput.value;
+  const fieldset = priceInput.parentElement;
+  const maxPriceValue = priceInput.getAttribute('max');
+  const minPriceValue = priceInput.getAttribute('min');
+  if (value > maxPriceValue || value < minPriceValue) {
+    fieldset.classList.add('ad-form__element--error');
+  } else {
+    priceInput.setCustomValidity('');
+    fieldset.classList.remove('ad-form__element--error');
+  }
+
+  priceInput.reportValidity();
+});
+
+const setMinPrice = function (type) {
+  switch (type) {
     case 'bungalow':
       priceInput.min = 0;
       priceInput.placeholder = '0';
@@ -36,17 +79,44 @@ const setMinPrice = function (type){
 
 setMinPrice(typeSelect.value);
 
-typeSelect.addEventListener('change', function(){
+typeSelect.addEventListener('change', function () {
   setMinPrice(this.value);
 });
 
-timeinSelect.addEventListener('change', function (){
+timeinSelect.addEventListener('change', function () {
   timeoutSelect.value = this.value;
 });
 
-timeoutSelect.addEventListener('change', function (){
+timeoutSelect.addEventListener('change', function () {
   timeinSelect.value = this.value;
 });
+
+
+const capacityOptions = capacitySelect.querySelectorAll('option');
+const setNumSeats = function (numRooms) {
+  capacityOptions.forEach((option) => {
+    if (+option.value <= +numRooms) {
+      if (+numRooms === 100) {
+        option.disabled = +option.value !== 0;
+        option.selected = +option.value === 0;
+      } else {
+        option.disabled = +option.value === 0;
+        option.selected = option.value === numRooms;
+      }
+    } else {
+      option.disabled = true;
+      option.selected = false;
+    }
+  });
+}
+
+setNumSeats(roomsSelect.value);
+
+roomsSelect.addEventListener('change', function () {
+  setNumSeats(this.value);
+});
+
+
 
 const showSuccessMessage = function(){
   const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
