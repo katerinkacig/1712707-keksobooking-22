@@ -1,10 +1,18 @@
-const titleInput = document.querySelector('#title');
-const typeSelect = document.querySelector('#type');
-const priceInput = document.querySelector('#price');
-const timeinSelect = document.querySelector('#timein');
-const timeoutSelect = document.querySelector('#timeout');
-const roomsSelect = document.querySelector('#room_number');
-const capacitySelect = document.querySelector('#capacity');
+import {sendData} from './api.js';
+import {addEscEvent} from './util.js';
+import {resetMainPin} from './map.js';
+
+const main = document.querySelector('main');
+const adForm = document.querySelector('.ad-form');
+const mapFiltersForm = document.querySelector('.map__filters');
+const titleInput = adForm.querySelector('#title');
+const typeSelect = adForm.querySelector('#type');
+const priceInput = adForm.querySelector('#price');
+const timeinSelect = adForm.querySelector('#timein');
+const timeoutSelect = adForm.querySelector('#timeout');
+const roomsSelect = adForm.querySelector('#room_number');
+const capacitySelect = adForm.querySelector('#capacity');
+const resetBtn = adForm.querySelector('.ad-form__reset');
 
 const checkRequired = function (field){
   const fieldset = field.parentElement;
@@ -109,4 +117,66 @@ roomsSelect.addEventListener('change', function () {
   setNumSeats(this.value);
 });
 
+resetBtn.addEventListener('click', function (evt){
+  evt.preventDefault();
+  adForm.reset();
+  mapFiltersForm.reset();
+  resetMainPin();
+});
+
+const showSuccessMessage = function(){
+  const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+  const successMessage = successMessageTemplate.cloneNode(true);
+
+  main.appendChild(successMessage);
+
+  addEscEvent(() => {
+    successMessage.remove();
+  });
+
+  document.body.addEventListener('click', function () {
+    successMessage.remove();
+  });
+};
+
+const showErrorMessage = function(){
+  const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+  const errorMessage = errorMessageTemplate.cloneNode(true);
+  const errorButton = errorMessage.querySelector('.error__button');
+
+  main.appendChild(errorMessage);
+
+  addEscEvent(() => {
+    errorMessage.remove();
+  });
+
+  errorButton.addEventListener('click', function (){
+    errorMessage.remove();
+  });
+
+  document.body.addEventListener('click', function () {
+    errorMessage.remove();
+  });
+};
+
+const setAdFormSubmit = () => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => {
+        showSuccessMessage();
+        adForm.reset();
+        mapFiltersForm.reset();
+        resetMainPin();
+      },
+      () => {
+        showErrorMessage();
+      },
+      new FormData(evt.target),
+    );
+  });
+}
+
+setAdFormSubmit();
 
