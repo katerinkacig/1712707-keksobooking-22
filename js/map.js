@@ -59,20 +59,56 @@ mainPin.on('moveend', (evt) => {
   fieldAddress.value = evt.target.getLatLng().lat.toFixed(5) + ', ' + evt.target.getLatLng().lng.toFixed(5);
 });
 
-pins.forEach((announcement) => {
-  const pin = window.L.marker(
-    {
-      lat: announcement.location.x,
-      lng: announcement.location.y,
-    },
-    {
-      icon: pinIcon,
-    },
-  );
+const housingType = document.querySelector('#housing-type');
+const housingPrice = document.querySelector('#housing-price');
+const housingRooms = document.querySelector('#housing-rooms');
 
-  pin
-    .addTo(map)
-    .bindPopup(
-      createCustomPopup(announcement),
-    );
+const markerGroup = window.L.layerGroup().addTo(map);
+
+const renderSimilarPins = (pins) =>{
+  markerGroup.clearLayers();
+  console.log(housingRooms.value);
+  console.log('----');
+  pins.slice(0, 5).forEach((announcement) => {
+    console.log(announcement.offer.rooms);
+  });
+  pins
+    .filter((pin) => {
+      return (pin.offer.type === housingType.value ||
+      housingType.value === 'any') &&
+      (housingRooms.value === 'any' ||
+      pin.offer.rooms === +housingRooms.value)
+    })
+    .slice(0, 5)
+    .forEach((announcement) => {
+      const pin = window.L.marker(
+        {
+          lat: announcement.location.x,
+          lng: announcement.location.y,
+        },
+        {
+          icon: pinIcon,
+        },
+      );
+      pin
+        .addTo(markerGroup)
+        .bindPopup(
+          createCustomPopup(announcement),
+        );
+    });
+}
+
+renderSimilarPins(pins);
+
+housingType.addEventListener('change', function (){
+  renderSimilarPins(pins)
 });
+
+housingPrice.addEventListener('change', function (){
+  renderSimilarPins(pins)
+});
+
+housingRooms.addEventListener('change', function (){
+  renderSimilarPins(pins)
+});
+
