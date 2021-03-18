@@ -2,6 +2,7 @@ import {adForm, mapFiltersForm, toggleActiveMode} from './toggle-active-mode.js'
 import {createCustomPopup} from './create-custom-popup.js';
 import {getData} from './api.js';
 import {showAlert} from './show-alert.js';
+import {sortAnnouncements} from './sort.js'
 
 
 const LAT = 35.68170;
@@ -10,13 +11,13 @@ const LNG = 139.75388;
 const fieldAddress = document.querySelector('#address');
 
 const mainPinIcon = window.L.icon({
-  iconUrl: '../img/main-pin.svg',
+  iconUrl: '/img/main-pin.svg',
   iconSize: [32, 32],
   iconAnchor: [16, 32],
 });
 
 const pinIcon = window.L.icon({
-  iconUrl: '../img/pin.svg',
+  iconUrl: '/img/pin.svg',
   iconSize: [32, 32],
   iconAnchor: [16, 32],
 });
@@ -32,7 +33,7 @@ const map = window.L.map('map-canvas')
   .setView({
     lat: LAT,
     lng: LNG,
-  }, 11);
+  }, 10);
 
 window.L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -65,28 +66,17 @@ mainPin.on('moveend', (evt) => {
   fieldAddress.value = evt.target.getLatLng().lat.toFixed(5) + ', ' + evt.target.getLatLng().lng.toFixed(5);
 });
 
-const housingType = document.querySelector('#housing-type');
-const housingPrice = document.querySelector('#housing-price');
-const housingRooms = document.querySelector('#housing-rooms');
+const filters = document.querySelectorAll('.map__filters-container .map__filter, .map__filters-container .map__checkbox');
 
 const markerGroup = window.L.layerGroup().addTo(map);
 
 const createPins = getData(
   (announcements) => {
     markerGroup.clearLayers();
-    console.log(housingRooms.value);
-    console.log('----');
-    pins.slice(0, 5).forEach((announcement) => {
-      console.log(announcement.offer.rooms);
-    });
+
     announcements
-      .filter((pin) => {
-        return (pin.offer.type === housingType.value ||
-          housingType.value === 'any') &&
-          (housingRooms.value === 'any' ||
-            pin.offer.rooms === +housingRooms.value)
-      })
-      .slice(0, 5)
+      .filter(sortAnnouncements)
+      .slice(0, 10)
       .forEach((announcement) => {
         const pin = window.L.marker(
           {
@@ -99,7 +89,7 @@ const createPins = getData(
         );
 
         pin
-          .addTo(map)
+          .addTo(markerGroup)
           .bindPopup(
             createCustomPopup(announcement),
           );
@@ -112,16 +102,11 @@ const createPins = getData(
 
 createPins();
 
-housingType.addEventListener('change', function (){
-  createPins()
-});
-
-housingPrice.addEventListener('change', function (){
-  createPins()
-});
-
-housingRooms.addEventListener('change', function (){
-  createPins()
+filters.forEach((filter) => {
+  filter.addEventListener('change', function (){
+    createPins();
+    map.closePopup();
+  }); 
 });
 
 export {resetMainPin};
