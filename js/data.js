@@ -50,7 +50,7 @@ const createAnnouncement = () => {
       address: lat + ', ' + lon,
       price: getRandomInt(1, 1000000),
       type: getRandomArrayElement(TYPES),
-      rooms: getRandomInt(1, 100),
+      rooms: getRandomInt(1, 4),
       guests: getRandomInt(1, 100),
       checkin: getRandomArrayElement(TIME),
       checkout: getRandomArrayElement(TIME),
