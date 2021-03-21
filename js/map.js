@@ -3,10 +3,12 @@ import {createCustomPopup} from './create-custom-popup.js';
 import {getData} from './api.js';
 import {showAlert} from './show-alert.js';
 import {sortAnnouncements} from './sort.js'
+import {debounce} from './util.js'
 
 
 const LAT = 35.68170;
 const LNG = 139.75388;
+const RERENDER_DELAY = 500;
 
 const fieldAddress = document.querySelector('#address');
 
@@ -103,10 +105,10 @@ const createPins = getData(
 createPins();
 
 filters.forEach((filter) => {
-  filter.addEventListener('change', function (){
+  filter.addEventListener('change', debounce(function() {
     createPins();
     map.closePopup();
-  }); 
+  }, RERENDER_DELAY));
 });
 
 export {resetMainPin};
