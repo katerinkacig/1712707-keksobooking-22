@@ -1,4 +1,4 @@
-const getRandomInt = function (min, max) {
+const getRandomInt = (min, max) => {
   if (min > max) {
     throw new RangeError('Неправильный диапозон ('+ min + ', ' + max + ') . Максимальное значение диапазона должно быть больше минимального')
   }
@@ -15,7 +15,7 @@ const getRandomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-const getRandomFloat = function (min, max, decimalPlaces) {
+const getRandomFloat = (min, max, decimalPlaces) => {
   if (min > max) {
     throw new RangeError('Неправильный диапозон ('+ min + ', ' + max + ') . Максимальное значение диапазона должно быть больше минимального')
   }
@@ -29,8 +29,8 @@ const getRandomFloat = function (min, max, decimalPlaces) {
   return parseFloat((Math.random() * (max - min) + min).toFixed(decimalPlaces));
 }
 
-const addEscEvent = function (handler){
-  document.body.addEventListener('keyup', function (e) {
+const addEscEvent = (handler) => {
+  document.body.addEventListener('keyup', (e) => {
     const key = e.keyCode;
 
     if (key === 27) {
@@ -39,11 +39,11 @@ const addEscEvent = function (handler){
   }, false);
 }
 
-const debounce = function(func, wait, immediate) {
+const debounce = (func, wait, immediate) => {
   let timeout;
   return function() {
     const context = this, args = arguments;
-    const later = function() {
+    const later = () => {
       timeout = null;
       if (!immediate) func.apply(context, args);
     };

@@ -2,7 +2,7 @@ import {adForm, mapFiltersForm, toggleActiveMode} from './toggle-active-mode.js'
 import {createCustomPopup} from './create-custom-popup.js';
 import {getData} from './api.js';
 import {showAlert} from './show-alert.js';
-import {sortAnnouncements} from './sort.js'
+import {filterAnnouncements} from './filter.js'
 import {debounce} from './util.js'
 
 
@@ -57,7 +57,7 @@ const mainPin = window.L.marker(
 
 mainPin.addTo(map);
 
-const resetMainPin = function (){
+const resetMainPin = () => {
   mainPin.setLatLng([LAT, LNG]);
 
   fieldAddress.value = LAT + ', ' + LNG;
@@ -77,7 +77,7 @@ const createPins = getData(
     markerGroup.clearLayers();
 
     announcements
-      .filter(sortAnnouncements)
+      .filter(filterAnnouncements)
       .slice(0, 10)
       .forEach((announcement) => {
         const pin = window.L.marker(
@@ -105,7 +105,7 @@ const createPins = getData(
 createPins();
 
 filters.forEach((filter) => {
-  filter.addEventListener('change', debounce(function() {
+  filter.addEventListener('change', debounce(() => {
     createPins();
     map.closePopup();
   }, RERENDER_DELAY));

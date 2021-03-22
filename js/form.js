@@ -14,9 +14,9 @@ const roomsSelect = adForm.querySelector('#room_number');
 const capacitySelect = adForm.querySelector('#capacity');
 const resetBtn = adForm.querySelector('.ad-form__reset');
 
-const checkRequired = function (field){
+const checkRequired = (field) => {
   const fieldset = field.parentElement;
-  field.addEventListener('invalid', function (){
+  field.addEventListener('invalid', () => {
     if (field.validity.valueMissing) {
       fieldset.classList.add('ad-form__element--error');
     }
@@ -44,6 +44,7 @@ priceInput.addEventListener('input', () => {
   const fieldset = priceInput.parentElement;
   const maxPriceValue = priceInput.getAttribute('max');
   const minPriceValue = priceInput.getAttribute('min');
+
   if (value > maxPriceValue || value < minPriceValue) {
     fieldset.classList.add('ad-form__element--error');
   } else {
@@ -54,7 +55,7 @@ priceInput.addEventListener('input', () => {
   priceInput.reportValidity();
 });
 
-const setMinPrice = function (type) {
+const setMinPrice = (type) => {
   switch (type) {
     case 'bungalow':
       priceInput.min = 0;
@@ -80,21 +81,21 @@ const setMinPrice = function (type) {
 
 setMinPrice(typeSelect.value);
 
-typeSelect.addEventListener('change', function () {
+typeSelect.addEventListener('change', () => {
   setMinPrice(this.value);
 });
 
-timeinSelect.addEventListener('change', function () {
+timeinSelect.addEventListener('change', () => {
   timeoutSelect.value = this.value;
 });
 
-timeoutSelect.addEventListener('change', function () {
+timeoutSelect.addEventListener('change', () => {
   timeinSelect.value = this.value;
 });
 
 
 const capacityOptions = capacitySelect.querySelectorAll('option');
-const setNumSeats = function (numRooms) {
+const setNumSeats = (numRooms) => {
   capacityOptions.forEach((option) => {
     if (+option.value <= +numRooms) {
       if (+numRooms === 100) {
@@ -113,18 +114,18 @@ const setNumSeats = function (numRooms) {
 
 setNumSeats(roomsSelect.value);
 
-roomsSelect.addEventListener('change', function () {
+roomsSelect.addEventListener('change', () => {
   setNumSeats(this.value);
 });
 
-resetBtn.addEventListener('click', function (evt){
+resetBtn.addEventListener('click', (evt) => {
   evt.preventDefault();
   adForm.reset();
   mapFiltersForm.reset();
   resetMainPin();
 });
 
-const showSuccessMessage = function(){
+const showSuccessMessage = () => {
   const successMessageTemplate = document.querySelector('#success').content.querySelector('.success');
   const successMessage = successMessageTemplate.cloneNode(true);
 
@@ -134,12 +135,12 @@ const showSuccessMessage = function(){
     successMessage.remove();
   });
 
-  document.body.addEventListener('click', function () {
+  document.body.addEventListener('click', () => {
     successMessage.remove();
   });
 };
 
-const showErrorMessage = function(){
+const showErrorMessage = () => {
   const errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
   const errorMessage = errorMessageTemplate.cloneNode(true);
   const errorButton = errorMessage.querySelector('.error__button');
@@ -150,11 +151,11 @@ const showErrorMessage = function(){
     errorMessage.remove();
   });
 
-  errorButton.addEventListener('click', function (){
+  errorButton.addEventListener('click', () => {
     errorMessage.remove();
   });
 
-  document.body.addEventListener('click', function () {
+  document.body.addEventListener('click', () => {
     errorMessage.remove();
   });
 };

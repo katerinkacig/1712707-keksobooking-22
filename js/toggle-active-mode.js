@@ -1,4 +1,4 @@
-const toggleActiveMode = function (form, classDisabled, isActive){
+const toggleActiveMode = (form, classDisabled, isActive) => {
   if(isActive){
     form.classList.remove(classDisabled);
   } else{
