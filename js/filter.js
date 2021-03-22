@@ -5,7 +5,7 @@ const housingGuests = document.querySelector('#housing-guests');
 const housingFeatures = document.querySelectorAll('.map__checkbox');
 
 
-const sortAnnouncements = function (announcement) {
+const filterAnnouncements = (announcement) => {
   const selectedFeatures = [];
   housingFeatures.forEach((feature) => {
     if(feature.checked){
@@ -39,4 +39,4 @@ const sortAnnouncements = function (announcement) {
     selectedFeatures.every(feature =>  announcement.offer.features.includes(feature))
 };
 
-export {sortAnnouncements};
+export {filterAnnouncements};
