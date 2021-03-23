@@ -72,31 +72,36 @@ const filters = document.querySelectorAll('.map__filters-container .map__filter,
 
 const markerGroup = window.L.layerGroup().addTo(map);
 
-const createPins = getData(
-  (announcements) => {
-    markerGroup.clearLayers();
+let announcements = [];
 
-    announcements
-      .filter(filterAnnouncements)
-      .slice(0, 10)
-      .forEach((announcement) => {
-        const pin = window.L.marker(
-          {
-            lat: announcement.location.lat,
-            lng: announcement.location.lng,
-          },
-          {
-            icon: pinIcon,
-          },
+const initPins = (announcementsFromServer = announcements) => {
+  announcements = announcementsFromServer;
+  markerGroup.clearLayers();
+
+  announcements
+    .filter(filterAnnouncements)
+    .slice(0, 10)
+    .forEach((announcement) => {
+      const pin = window.L.marker(
+        {
+          lat: announcement.location.lat,
+          lng: announcement.location.lng,
+        },
+        {
+          icon: pinIcon,
+        },
+      );
+
+      pin
+        .addTo(markerGroup)
+        .bindPopup(
+          createCustomPopup(announcement),
         );
+    });
+}
 
-        pin
-          .addTo(markerGroup)
-          .bindPopup(
-            createCustomPopup(announcement),
-          );
-      });
-  },
+const createPins = getData(
+  initPins,
   (err) => {
     showAlert(err + ' Не удалось получить данные с сервера.');
   },
@@ -106,9 +111,9 @@ createPins();
 
 filters.forEach((filter) => {
   filter.addEventListener('change', debounce(() => {
-    createPins();
+    initPins(announcements);
     map.closePopup();
   }, RERENDER_DELAY));
 });
 
-export {resetMainPin};
+export {resetMainPin, initPins};

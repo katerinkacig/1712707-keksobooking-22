@@ -1,6 +1,5 @@
 import {sendData} from './api.js';
-import {addEscEvent} from './util.js';
-import {resetMainPin} from './map.js';
+import {resetMainPin, initPins} from './map.js';
 
 const main = document.querySelector('main');
 const adForm = document.querySelector('.ad-form');
@@ -124,6 +123,7 @@ resetBtn.addEventListener('click', (evt) => {
   setNumSeats(roomsSelect.value);
   mapFiltersForm.reset();
   resetMainPin();
+  initPins();
 });
 
 const showSuccessMessage = () => {
@@ -132,13 +132,22 @@ const showSuccessMessage = () => {
 
   main.appendChild(successMessage);
 
-  addEscEvent(() => {
-    successMessage.remove();
-  });
+  const keyUpHandler = (evt) => {
+    if (evt.key === 'Escape') {
+      successMessage.remove();
+      document.body.removeEventListener('keyup', keyUpHandler);
+      document.body.removeEventListener('click', clickHandler );
+    }
+  }
 
-  document.body.addEventListener('click', () => {
+  const clickHandler =  () => {
     successMessage.remove();
-  });
+    document.body.removeEventListener('keyup', keyUpHandler);
+    document.body.removeEventListener('click', clickHandler );
+  };
+
+  document.body.addEventListener('keyup', keyUpHandler );
+  document.body.addEventListener('click', clickHandler );
 };
 
 const showErrorMessage = () => {
@@ -148,17 +157,26 @@ const showErrorMessage = () => {
 
   main.appendChild(errorMessage);
 
-  addEscEvent(() => {
-    errorMessage.remove();
-  });
+  const keyUpHandler = (evt) => {
+    if (evt.key === 'Escape') {
+      errorMessage.remove();
+      document.body.removeEventListener('keyup', keyUpHandler);
+      document.body.removeEventListener('click', clickHandler );
+    }
+  }
 
+  const clickHandler =  () => {
+    errorMessage.remove();
+    document.body.removeEventListener('keyup', keyUpHandler);
+    document.body.removeEventListener('click', clickHandler );
+  };
+
+  document.body.addEventListener('keyup', keyUpHandler );
+  document.body.addEventListener('click', clickHandler );
   errorButton.addEventListener('click', () => {
     errorMessage.remove();
   });
 
-  document.body.addEventListener('click', () => {
-    errorMessage.remove();
-  });
 };
 
 const setAdFormSubmit = () => {
@@ -172,6 +190,7 @@ const setAdFormSubmit = () => {
         setNumSeats(roomsSelect.value);
         mapFiltersForm.reset();
         resetMainPin();
+        initPins();
       },
       () => {
         showErrorMessage();
