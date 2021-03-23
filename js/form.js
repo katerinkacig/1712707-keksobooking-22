@@ -40,12 +40,12 @@ titleInput.addEventListener('input', () => {
 });
 
 priceInput.addEventListener('input', () => {
-  const value = priceInput.value;
+  const value = +priceInput.value;
   const fieldset = priceInput.parentElement;
-  const maxPriceValue = priceInput.getAttribute('max');
-  const minPriceValue = priceInput.getAttribute('min');
+  const maxPriceValue = +priceInput.getAttribute('max');
+  const minPriceValue = +priceInput.getAttribute('min');
 
-  if (value > maxPriceValue || value < minPriceValue) {
+  if (value < minPriceValue || value > maxPriceValue) {
     fieldset.classList.add('ad-form__element--error');
   } else {
     priceInput.setCustomValidity('');
@@ -82,15 +82,15 @@ const setMinPrice = (type) => {
 setMinPrice(typeSelect.value);
 
 typeSelect.addEventListener('change', () => {
-  setMinPrice(this.value);
+  setMinPrice(typeSelect.value);
 });
 
 timeinSelect.addEventListener('change', () => {
-  timeoutSelect.value = this.value;
+  timeoutSelect.value = timeinSelect.value;
 });
 
 timeoutSelect.addEventListener('change', () => {
-  timeinSelect.value = this.value;
+  timeinSelect.value = timeoutSelect.value;
 });
 
 
@@ -115,12 +115,13 @@ const setNumSeats = (numRooms) => {
 setNumSeats(roomsSelect.value);
 
 roomsSelect.addEventListener('change', () => {
-  setNumSeats(this.value);
+  setNumSeats(roomsSelect.value);
 });
 
 resetBtn.addEventListener('click', (evt) => {
   evt.preventDefault();
   adForm.reset();
+  setNumSeats(roomsSelect.value);
   mapFiltersForm.reset();
   resetMainPin();
 });
@@ -168,6 +169,7 @@ const setAdFormSubmit = () => {
       () => {
         showSuccessMessage();
         adForm.reset();
+        setNumSeats(roomsSelect.value);
         mapFiltersForm.reset();
         resetMainPin();
       },

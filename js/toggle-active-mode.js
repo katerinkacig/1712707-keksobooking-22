@@ -6,19 +6,11 @@ const toggleActiveMode = (form, classDisabled, isActive) => {
   }
 
   form.querySelectorAll('fieldset').forEach((element) => {
-    if(isActive){
-      element.disabled = false
-    } else {
-      element.disabled = true
-    }
+    element.disabled = !isActive;
   });
 
   form.querySelectorAll('select').forEach((element) => {
-    if(isActive){
-      element.disabled = false
-    } else {
-      element.disabled = true
-    }
+    element.disabled = !isActive;
   });
 }
 

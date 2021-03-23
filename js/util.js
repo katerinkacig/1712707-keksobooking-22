@@ -30,13 +30,14 @@ const getRandomFloat = (min, max, decimalPlaces) => {
 }
 
 const addEscEvent = (handler) => {
-  document.body.addEventListener('keyup', (e) => {
-    const key = e.keyCode;
-
-    if (key === 27) {
+  const keyUpHandler = (evt) => {
+    if (evt.key === 'Escape') {
       handler();
+      document.body.removeEventListener('keyup', keyUpHandler);
     }
-  }, false);
+  }
+
+  document.body.addEventListener('keyup', keyUpHandler);
 }
 
 const debounce = (func, wait, immediate) => {
